@@ -15,8 +15,8 @@ enum MODES{
     MODES_SICKLE, 
     MODES_FAN, 
     MODES_BOXES, 
-    MODES_SICKLE_ADV, 
-    MODES_FAN_ADV, 
+    MODES_SICKLE_ADV, //none
+    MODES_FAN_ADV, //none
     MODES_MAP_ES, 
     MODES_MAP_ES_ZH,
     MODES_CMAP_DNA,  
