@@ -1,4 +1,5 @@
 const NUM_OF_LUX = 5
+const NUM_OF_LB = 10;
 const express = require('express');
 const fs = require('fs');
 var formidable = require('formidable');
@@ -9,8 +10,10 @@ var light_effect = new Array(NUM_OF_LUX).fill(0);
 var lux_mode = new Array(NUM_OF_LUX).fill(0);
 var light_reset = new Array(NUM_OF_LUX).fill(0);
 var EXE_MODE = 0 //0 auto 1 manual
-var SONG = "Barricades.json"
+var SONG = "ESC.json"
 var Time = 0;
+var time = 0;
+var last_connect_time = new Array(NUM_OF_LB).fill(0);
 
 let EffectMapData = fs.readFileSync("public/"+ SONG);
 let EffectMap = JSON.parse(EffectMapData);
@@ -75,7 +78,8 @@ function stringify(content) {
     s += "P" + num1 + "," + num2 + ";"
     return s
 }
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 app.get("/get_effect", (req, res) => {
@@ -196,5 +200,17 @@ app.post('/fileupload', function (req, res) {
     });
 })
 
+app.get('/gettime', (req, res) => {
+    const ID = parseInt(req.query.id);  // 從查詢參數中取得ID
+    var now = new Date();
+    last_connect_time[ID] = now.getTime();
+    res.send(time.toString());
+});
+app.post('/settime', (req, res) => {
+    time = req.body.time;
+    //console.log(`Received time: ${time} ms`);
+    res.status(200).send('Time updated');
+});
 console.log(`Listening on port:${port} `);
 app.listen(port);
+

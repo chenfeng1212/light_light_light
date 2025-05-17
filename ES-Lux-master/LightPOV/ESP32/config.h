@@ -4,7 +4,7 @@
 // #define DEBUGGER
 // #define DEBUGGER_TASK_REPORT
 
-#define LUX_ID 2 
+#define LUX_ID 2
 
 /* Type Definition */
 #define time_t unsigned long
@@ -23,8 +23,8 @@
 #define WIFI_SSID3 "NCKUES[AUTO]"
 #define WIFI_PASS3 "nckues_auto"
 
-#define WIFI_REQUEST_URL ":20480/get_effect"
-#define WIFI_TIME_CHECK_URL ":20480/esp_time"
+#define WIFI_REQUEST_URL ":10240/get_effect"
+#define WIFI_TIME_CHECK_URL ":10240/esp_time"
 
 #define WIFI_CONNECT_RETRY 20
 

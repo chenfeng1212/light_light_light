@@ -181,7 +181,7 @@ int Communication::feed_data(Mode* m, String s){
 bool Communication::receive(Mode* m, int current_id){
     if (WiFi.status() == WL_CONNECTED){
         /* Request data from server */
-        String url = "http://192.168.0.250" + String(WIFI_REQUEST_URL) + "?id=" + current_id + "&luxid=" + LUX_ID;
+        String url = "http://" + WiFi.gatewayIP().toString()  + String(WIFI_REQUEST_URL) + "?id=" + current_id + "&luxid=" + LUX_ID;
         //Serial.println(url);
         http.begin(url);
         int httpCode = http.GET();
@@ -218,8 +218,8 @@ bool Communication::receive(Mode* m, int current_id){
 time_t Communication::check_start_time(uint8_t id, MODES mode, uint8_t* force_start){
     if (WiFi.status() == WL_CONNECTED){
         /* Request data from server */
-        // String url ="http://" + WiFi.gatewayIP().toString() +  String(WIFI_TIME_CHECK_URL) + "?id=" + id + "&effect=" + mode;
-        String url ="http://192.168.0.250" +  String(WIFI_TIME_CHECK_URL) + "?id=" + id + "&effect=" + mode;
+        String url ="http://" + WiFi.gatewayIP().toString() +  String(WIFI_TIME_CHECK_URL) + "?id=" + id + "&effect=" + mode;
+        // String url ="http://192.168.0.250" +  String(WIFI_TIME_CHECK_URL) + "?id=" + id + "&effect=" + mode;
         //Serial.println(url);
         http.begin(url);
         int httpCode = http.GET();

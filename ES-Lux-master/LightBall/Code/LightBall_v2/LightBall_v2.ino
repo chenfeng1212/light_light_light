@@ -68,7 +68,7 @@ void loop() {
   ArduinoOTA.handle();
   if(start == 0){
     WiFiClient client;
-    String url = "http://" + WiFi.gatewayIP().toString() + ":3000/gettime?id=" + ID;
+    String url = "http://" + WiFi.gatewayIP().toString() + ":10240/gettime?id=" + ID;
     //Serial.println(url);
     http.begin(client, url);  // Updated to new API
     int httpCode = http.GET();

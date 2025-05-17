@@ -2,7 +2,7 @@ const NUM_OF_LUX = 5
 const NUM_OF_MODE =4
 
 var NUM_OF_EFFECT
-var MODEDATA = "Barricades.json"
+var MODEDATA = "ESC.json"
 
 $(document).ready(function () {
     table_append()
@@ -261,3 +261,14 @@ document.getElementById("music-pause").onclick = function () { //音樂暫停按
 document.getElementById("music-restart").onclick = function () { //音樂重頭開始按鈕
     document.getElementById("music").currentTime = 0;
 }
+const audioPlayer = document.getElementById('music');
+setInterval(() => {
+            const nowTime = Math.floor(audioPlayer.currentTime * 1000);
+            fetch('/settime', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ time: nowTime })
+            });
+        }, 50);
