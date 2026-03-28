@@ -42,7 +42,9 @@
                 
             </div>
         </div> 
-        <div>hello</div>
+        <div style="text-align: center; margin-bottom: 20px;  border-radius: 8px; padding: 10px;">
+            <pre-view id="live_preview"  anime="true" speed="50"></pre-view>
+        </div>
         <div class="param_panel">
 
             <!-- Tabs -->
@@ -389,8 +391,8 @@
                             <div class="param_field compact">
                                 <label>Step Num</label>
                                 <div class="param_input_row">
-                                    <input type="number" class="func_number" data-param="XS_step" min="0" max="100" value="0">
-                                    <input type="range" class="func_range" data-param="XS_step" min="0" max="100" value="0">
+                                    <input type="number" class="func_number" data-param="XS_step" min="0" max="200" value="0">
+                                    <input type="range" class="func_range" data-param="XS_step" min="0" max="200" value="0">
                                 </div>
                             </div>
                         </div>
@@ -523,8 +525,8 @@
                             <div class="param_field compact">
                                 <label>Step Num</label>
                                 <div class="param_input_row">
-                                    <input type="number" class="func_number" data-param="XV_step" min="0" max="100" value="0">
-                                    <input type="range" class="func_range" data-param="XV_step" min="0" max="100" value="0">
+                                    <input type="number" class="func_number" data-param="XV_step" min="0" max="200" value="0">
+                                    <input type="range" class="func_range" data-param="XV_step" min="0" max="200" value="0">
                                 </div>
                             </div>
                         </div>
@@ -1042,5 +1044,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="./js/EffectBlock.js"></script>
     <script src="./js/script.js"></script>
+    <script src="./js/pre_view.js"></script>
 </body>
 </html>
