@@ -1,0 +1,457 @@
+/* ============================================================
+   1. 全域基礎設定 (Global Reset & Base)
+   ============================================================ */
+* {
+    box-sizing: border-box; 
+}
+
+body {
+    color: white;
+    background-color: #222;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================================
+   2. 頂部選單列 (Menu Bar)
+   ============================================================ */
+.menu_bar {
+    flex: 0 0 auto; 
+    width: 100%;
+    padding: 10px 20px 0 20px;
+    box-sizing: border-box;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+
+/* ============================================================
+   3. 第一列主編輯區 (Row 1 - 原 Row 2)
+   包含：左側素材庫 | 中間預覽區 | 右側參數面板
+   ============================================================ */
+.row1 {
+    flex: 0 0 520px;
+    height: 520px;
+    width: 100%;
+    padding: 20px 20px 0 20px;
+    box-sizing: border-box;
+
+    display: grid;
+    /* 預設佈局：素材庫 300px | 預覽區 彈性 | 參數面板 320px */
+    grid-template-columns: 300px 1fr 320px;
+    column-gap: 20px;
+    transition: all 0.3s ease; /* 用於切換控制面板時的平滑動畫 */
+    overflow: hidden;
+}
+
+/* 狀態切換：當開啟「控制模式」時的佈局變化 */
+.row1.mode-control {
+    /* 隱藏左側素材庫，並加大右側面板 */
+    grid-template-columns: 1fr 500px;
+}
+
+/* 控制模式下隱藏左側素材庫 */
+.row1.mode-control .Asset_library {
+    display: none;
+    visibility: hidden;
+}
+
+/* ============================================================
+   4. 左側素材庫 (Asset Library)
+   ============================================================ */
+.Asset_library {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden; 
+}
+
+/* 素材庫分頁標籤 (預設/自定義) */
+.Asset_library_header {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.Asset_library_header .tab {
+    flex: 1;
+    background: #2a2a2a;
+    padding: 6px 0;
+    color: #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid #3a3a3a;
+    text-align: center;
+    font-size: 14px;
+}
+
+.Asset_library_header .tab.active {
+    background: #3e4a52;
+    color: #fff;
+    border-color: #4a5a66;
+}
+
+/* 素材內容網格 */
+.Asset_library_content {
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    overflow-y: auto; /* 素材過多時允許捲動 */
+}
+
+.Asset_library_content.active {
+    display: grid;
+}
+
+/* 個別素材方塊 */
+.Asset_item {
+    padding: 10px 8px;
+    background: #2d2d2d;
+    color: #eaeaea;
+    border-radius: 6px;
+    border: 1px solid #444;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.Asset_item:hover {
+    background: #3a3a3a;
+    border-color: #666;
+}
+
+.Asset_item.active {
+    outline: 2px solid #4fb3d6; /* 選中時的高亮外框 */
+}
+
+/* ============================================================
+   5. 中間即時預覽區 (Preview Area)
+   ============================================================ */
+.preview_area {
+    background: #000;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+
+/* ============================================================
+   6. 右側參數與控制面板 (Param & Control Panel)
+   ============================================================ */
+.param_panel {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #eee;
+    font-size: 14px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 右側分頁標籤 (參數/控制) */
+.param_header {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.param_tab {
+    flex: 1;
+    padding: 6px 0;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    background: #2a2a2a;
+    color: #ddd;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center;
+}
+
+.param_tab.active {
+    background: #3e4a52;
+    color: #fff;
+    border-color: #4a5a66;
+}
+
+.param_body {
+    flex: 1;
+    overflow-y: auto;
+    display: none;
+}
+
+.param_body.active {
+    display: block;
+}
+
+/* --- 參數編輯組件樣式 --- */
+.param_group {
+    margin-bottom: 16px;   
+    padding: 12px 10px;    
+    border-radius: 6px;
+    background: #242424;
+}
+
+.param_group_title {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #d0eaff;
+}
+
+.param_label_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2px;    /* 稍微拉開與下方內容的距離 */
+}
+
+.param_input_row input[type="number"] {
+    width: 65px;
+    background: #111;
+    color: #eee;
+    border: 1px solid #444;
+    padding: 3px;
+    border-radius: 4px;
+}
+
+.btn_update_custom {
+    flex: 1;
+    padding: 8px 0; /* 稍微增加高度更好點擊 */
+    border-radius: 6px;
+    border: 1px solid #3e6b48; /* 深綠色邊框 */
+    background: #264d2e;       /* 深綠色背景 */
+    color: #e6ffed;            /* 淺綠色文字 */
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.btn_update_custom:hover:not(:disabled) {
+    background: #32663d;       /* 懸停時稍微亮一點 */
+}
+
+/* 刪除按鈕：改為深紅色調 */
+.btn_delete_custom {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #8c4848; /* 深紅色邊框 */
+    background: #5c2626;       /* 深紅色背景 */
+    color: #ffe6e6;            /* 淺紅色文字 */
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.btn_delete_custom:hover:not(:disabled) {
+    background: #7a3232;       /* 懸停時稍微亮一點 */
+}
+
+/* 共用：禁用狀態 */
+.btn_update_custom:disabled,
+.btn_delete_custom:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.5);   /* 禁用時降低飽和度 */
+}
+
+/* --- 按鈕切換邏輯 --- */
+
+/* 當素材是「預設 (preset)」時：顯示「加入」，隱藏「更新/刪除」 */
+.param_main[data-asset-type="preset"] .custom_actions {
+    display: none !important;
+}
+.param_main[data-asset-type="preset"] .btn_add_custom {
+    display: block !important;
+}
+
+/* 當素材是「自定義 (custom)」時：隱藏「加入」，顯示「更新/刪除」 */
+.param_main[data-asset-type="custom"] .custom_actions {
+    display: flex !important;
+    gap: 6px;
+}
+.param_main[data-asset-type="custom"] .btn_add_custom {
+    display: none !important;
+}
+
+/* --- 特殊狀況：清除模式 (MODES_CLEAR) --- */
+/* 當處於清除模式時，強制隱藏面板內的所有內容 */
+.param_main.is-clear-mode .param_group,
+.param_main.is-clear-mode .hsv_block,
+.param_main.is-clear-mode .btn_add_custom,
+.param_main.is-clear-mode .custom_actions {
+    display: none !important;
+}
+
+/* 當編輯自定義素材時，參數群組的標題顏色微調，提醒使用者這是自訂檔 */
+.param_main[data-asset-type="custom"] .param_group_title {
+    color: #4fd677; /* 改為你剛才設定的更新綠色調 */
+}
+
+/* HSV 專用區塊 */
+.hsv_block {
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 6px;
+    background: #202020;
+}
+
+/* 優化下拉選單背景與顏色 */
+.hsv_func_select {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background-color: #111; /* 改為深黑色背景 */
+    color: #eee;
+    font-size: 13px;
+    cursor: pointer;
+    appearance: none; /* 移除瀏覽器預設樣式 */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23888%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+}
+
+.hsv_func_select:hover {
+    border-color: #666;
+    background-color: #000;
+}
+
+.hsv_func_select:focus {
+    outline: none;
+    border-color: #4fb3d6;
+}
+
+/* 預設隱藏所有 HSV 參數組 */
+.hsv_func_params {
+    display: none;
+    margin-top: 6px;
+}
+
+/* 只有 active 狀態才顯示 */
+.hsv_func_params.active {
+    display: block;
+}
+
+/* 顏色預覽小方塊優化 */
+.color_preview {
+    /* 稍微放大尺寸 */
+    width: 22px;
+    height: 22px;
+    
+    padding: 0;
+    border: 1px solid #555; /* 稍微加亮邊框增加對比 */
+    border-radius: 4px;
+    
+    background-color: #000;
+    cursor: pointer;
+    
+    /* 置右對齊 */
+    margin-left: auto; 
+    
+    outline: none;
+    transition: all 0.1s ease;
+}
+
+.color_preview:hover {
+    transform: scale(1.15); /* 懸停時放大明顯一點 */
+    border-color: #888;
+}
+
+/* 確保父層容器可以正確置右 */
+.param_label_row {
+    display: flex;
+    align-items: center;
+    width: 100%; /* 確保佔滿寬度，margin-left: auto 才能生效 */
+    justify-content: space-between; /* 另一種強迫左右對齊的方式 */
+    margin-bottom: 6px;
+}
+
+/* --- 控制面板表格樣式 --- */
+.control_table_header, .control_row {
+    display: grid;
+    /* ID | State | Next | Mode | Rst */
+    grid-template-columns: 30px 55px 1fr 60px 30px; 
+    gap: 4px;
+    padding: 8px 5px;
+    align-items: center;
+    text-align: center;
+}
+
+.control_table_header {
+    border-bottom: 1px solid #444;
+    color: #aaa;
+    font-size: 12px;
+}
+
+.state_text.connected { color: #4fd677; }
+.state_text.disconnected { color: #ff5555; }
+
+/* ============================================================
+   7. 底部時間軸與音樂控制 (Music & Timeline)
+   ============================================================ */
+.music_and_effects {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto 0 auto;
+    padding: 0 20px 20px 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+/* Fabric.js 畫布基礎樣式 */
+canvas {
+    background: #07101a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+/* 音量與時間輸入框 */
+.time-controls input, .volume-control input[type="range"] {
+    background: #1f2a36;
+    border: 1px solid #2f3f4d;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/* 按鈕通用樣式 */
+button {
+    background: #2b3946;
+    color: #e6eef8;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover { background: #3b4a57; }
